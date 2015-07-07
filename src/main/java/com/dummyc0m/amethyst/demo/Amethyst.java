@@ -1,25 +1,24 @@
-package com.dummyc0m.amethyst.amethyst;
+package com.dummyc0m.amethyst.demo;
 
 
-import com.dummyc0m.amethyst.AmethystPlugin;
-import com.dummyc0m.amethystutil.config.Configuration;
+import com.dummyc0m.amethystcore.config.ACConfig;
 
 /**
- * com.dummyc0m.amethyst
+ * com.dummyc0m.demo
  * Created by Dummyc0m on 3/13/15.
  */
 public class Amethyst {
-    private Configuration configuration;
+    private ACConfig configuration;
     private ServerSettings serverSettings;
-    private AmethystPlugin amethystPlugin;
+    private com.dummyc0m.amethyst.Amethyst amethyst;
 
-    public Amethyst(AmethystPlugin amethystPlugin){
+    public Amethyst(com.dummyc0m.amethyst.Amethyst amethyst) {
         this.load();
     }
 
     public final void load(){
-        this.amethystPlugin = amethystPlugin;
-        this.configuration = new Configuration("settings.json", ServerSettings.class);
+        this.amethyst = amethyst;
+        this.configuration = new ACConfig("settings.json", ServerSettings.class);
         this.serverSettings = (ServerSettings) configuration.getSettings();
     }
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.dummyc0m.amethyst</groupId>
@@ -8,8 +8,8 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <bukkit.version>1.8.3-R0.1-SNAPSHOT</bukkit.version>
-        <amethystutil.version>0.1-SNAPSHOT</amethystutil.version>
+        <bukkit.version>LATEST</bukkit.version>
+        <amethystcore.version>LATEST</amethystcore.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -60,9 +60,10 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.dummyc0m.amethystutil</groupId>
-            <artifactId>AmethystUtil</artifactId>
-            <version>${amethystutil.version}</version>
+            <groupId>com.dummyc0m.amethystcore</groupId>
+            <artifactId>AmethystCore</artifactId>
+            <version>${amethystcore.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
