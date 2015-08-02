@@ -1,9 +1,9 @@
 package com.dummyc0m.amethyst.database.task;
 
 import com.dummyc0m.amethyst.Amethyst;
-import com.dummyc0m.amethyst.database.DataCache;
-import com.dummyc0m.amethyst.database.PlayerManager;
+import com.dummyc0m.amethyst.database.*;
 import org.bukkit.Server;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.Map;
@@ -12,17 +12,22 @@ import java.util.UUID;
 
 /**
  * Created by Dummyc0m on 7/7/15.
+ * Synchronized, ideally functional
  */
 public class AutoProcessTask implements Runnable {
+    private final DataInterface dataInterface;
     private final PlayerManager playerManager;
     private final DataCache dataCache;
+    private final DataConverter dataConverter;
     private final Amethyst amethyst;
     private final Server server;
     private final BukkitScheduler scheduler;
 
-    public AutoProcessTask() {
-        playerManager = PlayerManager.getInstance();
-        dataCache = DataCache.getInstance();
+    public AutoProcessTask(DataInterface dataInterface) {
+        this.dataInterface = dataInterface;
+        this.playerManager = dataInterface.getPlayerManager();
+        this.dataCache = dataInterface.getCache();
+        this.dataConverter = dataInterface.getDataConverter();
         amethyst = Amethyst.getInstance();
         server = amethyst.getServer();
         scheduler = server.getScheduler();
@@ -40,8 +45,6 @@ public class AutoProcessTask implements Runnable {
             if (data == DataCache.EMPTY) {
                 cleanUp(uuid);
                 processNewPlayer(uuid);
-            } else if (data == DataCache.REMOVED) {
-                playerManager.setLoadStage(uuid, null);
             } else {
                 cleanUp(uuid);
                 processPlayer(uuid, data);
@@ -50,11 +53,20 @@ public class AutoProcessTask implements Runnable {
     }
 
     private void processNewPlayer(UUID uuid) {
-        //TODO
+        scheduleAutoSave(uuid);
+        dataCache.cacheData(uuid, new PlayerData());
+        //TODO Notify Player(notification system)
     }
 
     private void processPlayer(UUID uuid, String data) {
-        //TODO
+        try {
+            dataConverter.deserializeRawData(uuid, data);
+            scheduleAutoSave(uuid);
+            //TODO Notify Player
+        } catch (InvalidConfigurationException e) {
+            //TODO Notify Player
+            e.printStackTrace();
+        }
 
     }
 
@@ -64,6 +76,13 @@ public class AutoProcessTask implements Runnable {
     }
 
     private void scheduleAutoSave(UUID uuid) {
-        //TODO
+        Map<UUID, Integer> idMap = playerManager.getAutoSaveIdMap();
+        if (idMap.get(uuid) != null) {
+            server.getScheduler().cancelTask(idMap.remove(uuid));
+            //TODO Notification
+        }
+        Runnable task = new AutoSaveTask(dataInterface, server, uuid);
+        int id = scheduler.runTaskTimer(amethyst, task, 3600, 3600).getTaskId();
+        idMap.put(uuid, id);
     }
 }

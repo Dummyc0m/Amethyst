@@ -5,16 +5,21 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Dummyc0m on 7/6/15.
+ * Ideally Functional
  */
 public class DataCache {
-    public static final String EMPTY = new String();
-    public static final String REMOVED = new String();
-    private static final DataCache DATA_CACHE = new DataCache();
-    private final Map<UUID, String> rawDataMap = new ConcurrentHashMap<>();
-    private final Map<UUID, PlayerData> dataMap = new HashMap<>();
+    public static final String EMPTY;
 
-    public static DataCache getInstance() {
-        return DATA_CACHE;
+    static {
+        EMPTY = new String();
+    }
+
+    private final Map<UUID, String> rawDataMap;
+    private final Map<UUID, PlayerData> dataMap;
+
+    public DataCache() {
+        rawDataMap = new ConcurrentHashMap<>();
+        dataMap = new HashMap<>();
     }
 
     public void cacheRawData(UUID uuid, String data) {

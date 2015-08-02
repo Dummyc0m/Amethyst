@@ -7,14 +7,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Dummyc0m on 7/7/15.
+ * ideally functional
  */
 public class PlayerManager {
-    private static final PlayerManager PLAYER_MANAGER = new PlayerManager();
-    private final Map<UUID, LoadStage> loadStageMap = new ConcurrentHashMap<>();
-    private final Map<UUID, Integer> autoSaveIdMap = new HashMap<>();
+    private final Map<UUID, LoadStage> loadStageMap;
+    private final Map<UUID, Integer> autoSaveIdMap;
 
-    public static PlayerManager getInstance() {
-        return PLAYER_MANAGER;
+    public PlayerManager() {
+        loadStageMap = new ConcurrentHashMap<>();
+        autoSaveIdMap = new HashMap<>();
     }
 
     public void setLoadStage(UUID uuid, LoadStage loadStage) {
@@ -34,8 +35,8 @@ public class PlayerManager {
     }
 
     public enum LoadStage {
+        CONNECTED,
         JOINED,
         LOADED,
-        PROCESSED,
     }
 }
